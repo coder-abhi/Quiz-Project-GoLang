@@ -6,12 +6,14 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 )
 
 func main() {
 
 	//                      Flag Name, Value       , Usage
 	csvFileName := flag.String("csv", "problems.csv", "Its is in formate of Quesion and Answers")
+	timeLimit := flag.Int("limit", 30, "Time limit for Quiz")
 	flag.Parse()
 	/* Use of Flag :-
 	It will now show anything when we run it simply
@@ -37,18 +39,31 @@ func main() {
 
 	var score int
 
+	timer := time.NewTimer(time.Duration(*timeLimit) * time.Second)
+
 	for i, que := range problems {
 		fmt.Printf("\nProblem #%d : %s = ", i+1, que.q)
+		answerCh := make(chan string)
+		go func() {
 
-		var answer string
-		fmt.Scanf("%s\n", &answer)
-		if answer == que.a {
-			score++
-			fmt.Println("Correct!")
+			var answer string
+			fmt.Scanf("%s\n", &answer)
+			answerCh <- answer
+		}()
+		select {
+		case <-timer.C:
+			fmt.Printf("You Scored %d out of %d.", score, len(lines))
+			return
+
+		case answer := <-answerCh:
+			if answer == que.a {
+				score++
+				fmt.Println("Correct!")
+			}
+
 		}
 	}
 
-	fmt.Printf("You Scored %d out of %d.", score, len(lines))
 }
 
 func parseProblem(lines [][]string) []problem {
