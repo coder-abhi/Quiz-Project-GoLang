@@ -5,7 +5,9 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -21,6 +23,7 @@ func main() {
 
 	switch *topic {
 	case "math":
+		fmt.Println("In Swithch cse")
 		problemSet = MathQuiz(*timeLimit)
 
 	case "general":
@@ -46,15 +49,16 @@ func main() {
 		// select funtion works like which channel give value first will execute
 		select {
 		case <-timer.C: // Execute when limit time will over
-			fmt.Printf("\nYou Scored %d out of %d.", score, len(problemSet))
+			fmt.Printf("\nYou Scored %d out of %d.\n", score, len(problemSet))
 			return
 
 		case answer := <-answerCh: // Execute when answer is given
 			if answer == que.a {
 				score++
 				fmt.Println("Correct!")
+			} else {
+				fmt.Println("Wrong !!!")
 			}
-
 		}
 	}
 
@@ -62,8 +66,31 @@ func main() {
 
 func MathQuiz(limit int) []problem {
 
-	ret := make([]problem, 1)
-	return ret
+	min := 0
+	max := 100
+
+	var mathSet [][]string
+
+	i := 0
+	for i < 10 {
+
+		k := 0
+		var mathQue string
+		ans := 0
+		for k < 2 {
+			rand.Seed(time.Now().UnixNano())
+			digit := rand.Intn(max-min+1) + min
+			ans += digit
+			mathQue += (strconv.Itoa(digit) + " ")
+			k++
+		}
+
+		mathQue = strings.Replace(mathQue, " ", " + ", 1)
+		mathAns := strconv.Itoa(ans)
+		mathSet = append(mathSet, []string{mathQue, mathAns})
+		i++
+	}
+	return parseProblem(mathSet)
 }
 
 func GeneralQuiz(limit int) []problem {
