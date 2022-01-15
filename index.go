@@ -14,17 +14,8 @@ func main() {
 
 	topic := flag.String("topic", "general", "On Which Topic you want to start Quiz, options -> math, general")
 
-	//                      Flag Name, Default Value   , Usage
-	// csvFileName := flag.String("csv", "prblems.csv", "Its is in formate of Quesion and Answers")
 	timeLimit := flag.Int("limit", 15, "Time limit for Quiz")
 	flag.Parse()
-	/* Use of Flag :-
-	It will now show anything when we run it simply
-	like - go run index.go
-
-	But It will show 3rd parameter usage when we run it as help
-	like - go run index.go -h (or) -help
-	*/
 
 	var problemSet []problem
 
@@ -96,9 +87,11 @@ func GeneralQuiz(limit int) []problem {
 	for i, file := range fileList {
 		fmt.Println(i+1, file)
 	}
-	fmt.Scanln(&inputFile)
 
+	fmt.Scanln(&inputFile)
 	csvFileName := fileList[inputFile-1]
+
+	fmt.Printf("\n\n Your Selected Topic : %s\t\tSelected Time Limit : %d\n", csvFileName, limit)
 
 	file, err := os.Open(csvFileName)
 	if err != nil {
