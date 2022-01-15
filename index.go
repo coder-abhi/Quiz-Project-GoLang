@@ -67,7 +67,16 @@ func main() {
 func MathQuiz(limit int) []problem {
 
 	min := 0
-	max := 100
+	max := 1
+
+	var diff int
+
+	fmt.Println("Enter Difficulty level")
+	fmt.Scanln(&diff)
+
+	for i := 0; i < diff; i++ {
+		max *= 10
+	}
 
 	var mathSet [][]string
 
