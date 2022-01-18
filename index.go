@@ -33,11 +33,10 @@ func main() {
 
 	var score int
 
-	timer := time.NewTimer(time.Duration(*timeLimit) * time.Second)
-
 	// for loop for printing question and scanning every answer
 	for i, que := range problemSet {
 		fmt.Printf("\nProblem #%d : %s = ", i+1, que.q)
+		timer := time.NewTimer(time.Duration(*timeLimit) * time.Second)
 		answerCh := make(chan string)
 		go func() {
 
