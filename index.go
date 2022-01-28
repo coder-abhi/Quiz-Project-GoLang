@@ -78,22 +78,42 @@ func MathQuiz(limit int) []problem {
 	}
 
 	var mathSet [][]string
+	var flag int
+	var ans int
+
+	fmt.Printf("\nChoose Subject (Enter No.):- \n~ 1.Addition\t~ 2.Multiplication\n")
+	fmt.Scanln(&flag)
+
+	var flagSign string
+	if flag == 1 {
+		flagSign = " + "
+		ans = 0
+	} else {
+		flagSign = " * "
+		ans = 1
+	}
 
 	i := 0
 	for i < 10 {
 
 		k := 0
 		var mathQue string
-		ans := 0
 		for k < 2 {
 			rand.Seed(time.Now().UnixNano())
 			digit := rand.Intn(max-min+1) + min
-			ans += digit
+
+			if flag == 1 {
+				ans += digit
+			} else {
+				ans *= digit
+			}
+			// fmt.Println("Digit : ", digit)
+			// fmt.Println("Anser : ", ans)
 			mathQue += (strconv.Itoa(digit) + " ")
 			k++
 		}
 
-		mathQue = strings.Replace(mathQue, " ", " + ", 1)
+		mathQue = strings.Replace(mathQue, " ", flagSign, 1)
 		mathAns := strconv.Itoa(ans)
 		mathSet = append(mathSet, []string{mathQue, mathAns})
 		i++
